@@ -4,6 +4,7 @@ import com.fmi.inventory.dto.CreateItemDto;
 import com.fmi.inventory.dto.UpdateItemDto;
 import com.fmi.inventory.model.InventoryItem;
 import com.fmi.inventory.service.InventoryService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +27,7 @@ public class InventoryItemController {
     }
 
     @PostMapping
-    public ResponseEntity<InventoryItem> addItem(@RequestBody CreateItemDto item) {
+    public ResponseEntity<InventoryItem> addItem(@RequestBody @Valid CreateItemDto item) {
         InventoryItem createdItem = inventoryService.addItem(
             item.name(),
             item.description(),
@@ -45,10 +46,7 @@ public class InventoryItemController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateItem(
-        @PathVariable String id,
-        @RequestBody UpdateItemDto item
-    ) {
+    public ResponseEntity<Void> updateItem(@PathVariable String id, @RequestBody @Valid UpdateItemDto item) {
         boolean updated = inventoryService.updateItem(
             id, item.name(), item.description(), item.quantity(), item.category(), item.borrowable()
         );
