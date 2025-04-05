@@ -44,6 +44,15 @@ public class InMemoryCrudRepository<T extends Identifiable<String>> implements C
         storage.remove(id);
     }
 
+    @Override
+    public T findByIdOrThrow(String id) {
+        T entity = storage.get(id);
+        if (entity == null) {
+            throw new IllegalArgumentException("No entity with such id: " + id);
+        }
+        return entity;
+    }
+
     private String createNewId() {
         return UUID.randomUUID().toString();
     }

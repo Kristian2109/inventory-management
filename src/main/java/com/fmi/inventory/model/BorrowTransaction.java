@@ -19,7 +19,7 @@ public class BorrowTransaction implements Identifiable<String> {
         this.returned = false;
     }
 
-    public BorrowTransaction( ClubMember member, InventoryItem item, int days) {
+    public BorrowTransaction(ClubMember member, InventoryItem item, int days) {
         this.member = member;
         this.item = item;
         this.borrowedDate = LocalDateTime.now();

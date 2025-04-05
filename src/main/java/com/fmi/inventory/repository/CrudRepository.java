@@ -11,4 +11,5 @@ public interface CrudRepository<T extends Identifiable<ID>, ID> {
     List<T> findAll();
     void update(T entity);
     void deleteById(ID id);
+    T findByIdOrThrow(ID id);
 }
