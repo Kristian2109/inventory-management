@@ -27,8 +27,14 @@ public class BorrowTransaction implements Identifiable<String> {
         this.returned = false;
     }
 
+    @Override
     public String getId() {
         return id;
+    }
+
+    @Override
+    public void setId(String id) {
+        this.id = id;
     }
 
     public ClubMember getMember() {

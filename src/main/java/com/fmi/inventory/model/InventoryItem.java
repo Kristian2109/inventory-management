@@ -39,7 +39,12 @@ public class InventoryItem implements Identifiable<String> {
         this.addedDate = LocalDateTime.now();
     }
 
+    @Override
     public String getId() { return id; }
+    @Override
+    public void setId(String id) {
+        this.id = id;
+    }
     public String getName() { return name; }
     public String getDescription() { return description; }
     public int getQuantity() { return quantity; }

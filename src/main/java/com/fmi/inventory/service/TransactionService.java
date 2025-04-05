@@ -7,10 +7,12 @@ import com.fmi.inventory.model.InventoryItem;
 import com.fmi.inventory.repository.BorrowTransactionRepository;
 import com.fmi.inventory.repository.ClubMemberRepository;
 import com.fmi.inventory.repository.InventoryItemRepository;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Service
 public class TransactionService {
     private final InventoryItemRepository itemRepository;
     private final BorrowTransactionRepository transactionRepository;

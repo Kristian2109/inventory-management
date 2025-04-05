@@ -34,10 +34,10 @@ public class InventoryService {
      * @param category The category of the item.
      * @param borrowable Whether the item can be borrowed.
      */
-    public void addItem(String name, String description, int quantity, String serialNumber, String unit,
+    public InventoryItem addItem(String name, String description, int quantity, String serialNumber, String unit,
                         String category, boolean borrowable) {
         InventoryItem item = new InventoryItem(name, description, quantity, serialNumber, unit, category, borrowable);
-        itemRepository.save(item);
+        return itemRepository.save(item);
     }
 
     /**

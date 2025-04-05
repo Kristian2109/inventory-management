@@ -14,11 +14,14 @@ public class InMemoryCrudRepository<T extends Identifiable<String>> implements C
     protected final Map<String, T> storage = new HashMap<>();
 
     @Override
-    public void save(T entity) {
+    public T save(T entity) {
         if (entity == null) {
             throw new IllegalArgumentException("Entity or ID cannot be null");
         }
-        storage.put(createNewId(), entity);
+        String id = createNewId();
+        entity.setId(id);
+        storage.put(id, entity);
+        return entity;
     }
 
     @Override

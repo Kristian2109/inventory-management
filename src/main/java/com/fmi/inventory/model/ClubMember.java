@@ -23,6 +23,11 @@ public class ClubMember implements Identifiable<String> {
         return id;
     }
 
+    @Override
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public String getFirstName() {
         return firstName;
     }
