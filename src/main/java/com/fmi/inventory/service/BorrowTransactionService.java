@@ -13,14 +13,14 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
-public class TransactionService {
+public class BorrowTransactionService {
     private final InventoryItemRepository itemRepository;
     private final BorrowTransactionRepository transactionRepository;
     private final ClubMemberRepository memberRepository;
 
-    public TransactionService(InventoryItemRepository itemRepository,
-                              BorrowTransactionRepository borrowTransactionRepository,
-                              ClubMemberRepository memberRepository) {
+    public BorrowTransactionService(InventoryItemRepository itemRepository,
+                                    BorrowTransactionRepository borrowTransactionRepository,
+                                    ClubMemberRepository memberRepository) {
         this.itemRepository = itemRepository;
         this.transactionRepository = borrowTransactionRepository;
         this.memberRepository = memberRepository;
@@ -32,7 +32,7 @@ public class TransactionService {
      * @param inventoryItemId The item being borrowed.
      * @param days The number of days the item is borrowed for.
      */
-    void borrowItem(String memberId, String inventoryItemId, int days) {
+    public void borrowItem(String memberId, String inventoryItemId, int days) {
         ClubMember clubMember = memberRepository.findByIdOrThrow(memberId);
         InventoryItem inventoryItem = itemRepository.findByIdOrThrow(inventoryItemId);
         if (!inventoryItem.isBorrowable()) {
@@ -49,7 +49,7 @@ public class TransactionService {
      * Retrieves all transactions in the system.
      * @return List of all transactions.
      */
-    List<BorrowTransaction> getAllTransactions() {
+    public List<BorrowTransaction> getAllTransactions() {
         return transactionRepository.findAll();
     }
 
@@ -58,7 +58,7 @@ public class TransactionService {
      * @param transactionId The ID of the transaction being completed.
      * @return true if the return was successful, false otherwise.
      */
-    boolean returnItem(String transactionId) {
+    public boolean returnItem(String transactionId) {
         BorrowTransaction transaction = transactionRepository.findByIdOrThrow(transactionId);
         if (transaction.isReturned()) {
             return false;
@@ -72,7 +72,7 @@ public class TransactionService {
      * Retrieves a list of all overdue transactions.
      * @return List of overdue transactions.
      */
-    List<BorrowTransaction> getOverdueTransactions() {
+    public List<BorrowTransaction> getOverdueTransactions() {
         return transactionRepository.getTransactionWhereIsReturnedAndDueDateIsBefore(false, LocalDateTime.now());
     }
 }

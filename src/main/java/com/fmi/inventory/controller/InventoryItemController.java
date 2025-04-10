@@ -14,7 +14,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/items")
 public class InventoryItemController {
-
     private final InventoryService inventoryService;
 
     public InventoryItemController(InventoryService inventoryService) {
