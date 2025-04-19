@@ -1,6 +1,8 @@
 package com.fmi.inventory.controller;
 
+import com.fmi.inventory.dto.BorrowTransactionDto;
 import com.fmi.inventory.dto.CreateBorrowTransactionDto;
+import com.fmi.inventory.dto.ReturnItemDto;
 import com.fmi.inventory.model.BorrowTransaction;
 import com.fmi.inventory.service.BorrowTransactionService;
 import org.springframework.http.ResponseEntity;
@@ -18,23 +20,22 @@ public class BorrowTransactionController {
     }
 
     @PostMapping("/borrow")
-    public ResponseEntity<String> borrowItem(@RequestBody CreateBorrowTransactionDto request) {
-        service.borrowItem(request.memberId(), request.inventoryItemId(), request.days());
-        return ResponseEntity.ok("Item borrowed successfully.");
+    public ResponseEntity<BorrowTransactionDto> borrowItem(@RequestBody CreateBorrowTransactionDto request) {
+        BorrowTransactionDto borrowTransaction = service.borrowItem(
+            request.memberId(), request.inventoryItemId(), request.days()
+        );
+
+        return ResponseEntity.ok(borrowTransaction);
     }
 
     @PostMapping("/{id}/return")
-    public ResponseEntity<String> returnItem(@PathVariable String id) {
+    public ResponseEntity<ReturnItemDto> returnItem(@PathVariable String id) {
         boolean success = service.returnItem(id);
-        if (success) {
-            return ResponseEntity.ok("Item returned successfully.");
-        } else {
-            return ResponseEntity.badRequest().body("Item has already been returned.");
-        }
+        return ResponseEntity.ok(new ReturnItemDto(success));
     }
 
     @GetMapping
-    public ResponseEntity<List<BorrowTransaction>> getAllTransactions() {
+    public ResponseEntity<List<BorrowTransactionDto>> getAllTransactions() {
         return ResponseEntity.ok(service.getAllTransactions());
     }
 

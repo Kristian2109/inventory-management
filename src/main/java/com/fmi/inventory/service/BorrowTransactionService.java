@@ -1,6 +1,8 @@
 package com.fmi.inventory.service;
 
+import com.fmi.inventory.dto.BorrowTransactionDto;
 import com.fmi.inventory.exceptions.OperationNotPermittedException;
+import com.fmi.inventory.mappers.BorrowTransactionMapper;
 import com.fmi.inventory.model.BorrowTransaction;
 import com.fmi.inventory.model.ClubMember;
 import com.fmi.inventory.model.InventoryItem;
@@ -11,13 +13,13 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class BorrowTransactionService {
     private final InventoryItemRepository itemRepository;
     private final BorrowTransactionRepository transactionRepository;
     private final ClubMemberRepository memberRepository;
-
     public BorrowTransactionService(InventoryItemRepository itemRepository,
                                     BorrowTransactionRepository borrowTransactionRepository,
                                     ClubMemberRepository memberRepository) {
@@ -32,7 +34,7 @@ public class BorrowTransactionService {
      * @param inventoryItemId The item being borrowed.
      * @param days The number of days the item is borrowed for.
      */
-    public void borrowItem(String memberId, String inventoryItemId, int days) {
+    public BorrowTransactionDto borrowItem(String memberId, String inventoryItemId, int days) {
         ClubMember clubMember = memberRepository.findByIdOrThrow(memberId);
         InventoryItem inventoryItem = itemRepository.findByIdOrThrow(inventoryItemId);
         if (!inventoryItem.isBorrowable()) {
@@ -42,15 +44,16 @@ public class BorrowTransactionService {
             throw new OperationNotPermittedException("Item with id " + inventoryItemId + " is not stock!");
         }
         BorrowTransaction newBorrowTransaction = new BorrowTransaction(clubMember, inventoryItem, days);
-        transactionRepository.save(newBorrowTransaction);
+        BorrowTransaction created = transactionRepository.save(newBorrowTransaction);
+        return BorrowTransactionMapper.toDto(created);
     }
 
     /**
      * Retrieves all transactions in the system.
      * @return List of all transactions.
      */
-    public List<BorrowTransaction> getAllTransactions() {
-        return transactionRepository.findAll();
+    public List<BorrowTransactionDto> getAllTransactions() {
+        return transactionRepository.findAll().stream().map(BorrowTransactionMapper::toDto).toList();
     }
 
     /**
@@ -64,7 +67,7 @@ public class BorrowTransactionService {
             return false;
         }
         transaction.setReturned(true);
-        transactionRepository.save(transaction);
+        transactionRepository.update(transaction);
         return true;
     }
 
